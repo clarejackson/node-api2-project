@@ -13,7 +13,7 @@ router.get("/", (req, res) => {
 // respond with HTTP status code 500.
 // return the following JSON: { message: "The posts information could not be retrieved" }.
 router.get("/api/posts", (req, res) => {
-  console.log(req.query)
+  // console.log(req.query)
 
   posts.find()
   .then((posts) => {
@@ -36,7 +36,24 @@ router.get("/api/posts", (req, res) => {
 
 // respond with HTTP status code 500.
 // return the following JSON: { message: "The post information could not be retrieved" }.
-
+router.get("/api/posts/:id", (req, res) => {
+  posts.findById(req.params.id)
+  .then((post) => {
+    if (post) {
+      res.status(200).json(post)
+    } else {
+      res.status(404).json({
+        message: "The post with the specified ID does not exist"
+      })
+      .catch((error) => {
+        console.log(error)
+        res.status(500).json({
+          message: "The post information could not be retrieved"
+        })
+      })
+    }
+  })
+})
 
 
 // 3 [POST] /api/posts
@@ -53,7 +70,23 @@ router.get("/api/posts", (req, res) => {
 
 // respond with HTTP status code 500 (Server Error).
 // return the following JSON: { message: "There was an error while saving the post to the database" }.
-
+router.post("/api/posts", (req, res) => {
+  if (!req.body.title || !req.body.contents){
+    return res.status(400).json({
+      message: "Please provide title and contents for the post"
+    })
+  }
+  posts.insert(req.body)
+  .then((post) => {
+    res.status(201).json(post)
+  })
+  .catch((error) => {
+    console.log(error)
+    res.status(500).json({
+      message: "There was an error while saving the post to the database"
+    })
+  })
+})
 
 
 // 4 [PUT] /api/posts/:id
@@ -74,6 +107,7 @@ router.get("/api/posts", (req, res) => {
 // update the post document in the database using the new information sent in the request body.
 // return HTTP status code 200 (OK).
 // return the newly updated post.
+
 
 
 
