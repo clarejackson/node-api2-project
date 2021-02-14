@@ -107,7 +107,29 @@ router.post("/api/posts", (req, res) => {
 // update the post document in the database using the new information sent in the request body.
 // return HTTP status code 200 (OK).
 // return the newly updated post.
-
+router.put("/api/posts/:id", (req, res) => {
+  if (!req.body.title || !req.body.contents) {
+    return res.status(400).json({
+      message: "Please provide title and contents for the post"
+    })
+  }
+  posts.update(req.params.id, req.body)
+  .then((post) => {
+    if (post) {
+      res.status(200).json(post)
+    } else {
+      res.status(404).json({
+        message: "The post with the specified ID does not exist"
+      })
+    }
+  })
+  .catch((error) => {
+    console.log(error)
+    res.status(500).json({
+      message: "The post information could not be modified"
+    })
+  })
+})
 
 
 
