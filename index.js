@@ -1,6 +1,8 @@
 // require your server and launch it here
 const server = require("./api/server")
 
-server.listen(4000, () => {
-	console.log("running at http://localhost:4000")
+const port = process.env.PORT || 5000;
+
+server.listen(port, () => {
+	console.log(`running at http://localhost:${port}`)
 })
