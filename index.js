@@ -1,5 +1,6 @@
 // require your server and launch it here
 const server = require("./api/server")
+require("dotenv").config()
 
 const port = process.env.PORT || 5000;
 
